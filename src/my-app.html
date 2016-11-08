@@ -78,6 +78,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       #eltoastnegativo{
         --paper-toast-color: #f99;
       }
+      app-drawer p {
+        font-size: .7em;
+        margin-left: 10px;
+      }
     </style>
 
     <firebase-app 
@@ -96,6 +100,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       signed-in="{{logueado}}"
     ></firebase-auth>
 
+    <firebase-document
+      id="fddata"
+      path="/appData"
+      data="{{appData}}"
+    ></firebase-document>
+
+    <firebase-query
+      path="/juegos"
+      data="{{juegos}}"
+    ></firebase-query>
+
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -108,10 +123,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="/view1">View One</a>
+          <a name="juegos" href="/juegos">Juegos</a>
           <a name="view2" href="/view2">View Two</a>
           <a name="view3" href="/view3">View Three</a>
+          <a name="admin" href="/admin/">Admin</a>
         </iron-selector>
+
+        <p>
+          App: [[appData.appName]]
+          <br>
+          Creador: [[appData.appCreator]]
+        </p>
+
       </app-drawer>
 
       <!-- Main content -->
@@ -132,9 +155,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
-          <my-view1 name="view1"></my-view1>
+          <my-juegos name="juegos"
+            juegos="[[juegos]]"
+          ></my-juegos>
           <my-view2 name="view2"></my-view2>
           <my-view3 name="view3"></my-view3>
+          <my-admin name="admin"
+            route="{{route}}"
+            app-data="[[appData]]"
+          ></my-admin>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
       </app-header-layout>
@@ -160,12 +189,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: false
         },
         user: Object,
-        fbapp: Object
+        fbapp: Object,
+        appData: Object,
+        juegos: Array
       },
 
       listeners: {
         'feedback-positivo': 'feedbackPositivo',
         'feedback-negativo': 'feedbackNegativo',
+        'datos-modificados': 'guardarDatosApp'
       },
 
       observers: [
@@ -173,7 +205,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       _routePageChanged: function(page) {
-        this.page = page || 'view1';
+        this.page = page || 'juegos';
       },
 
       _pageChanged: function(page) {
@@ -224,6 +256,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           .catch(function() {
             console.log('no he podido.... perfil')
           })
+      },
+
+      guardarDatosApp: function(e, data) {
+        //usando el sistema de binding de polymer
+        this.set('appData.appName', data.appName);
+        this.set('appData.appCreator', data.appCreator);
+        
+        //usando el propio API del componente    
+        //this.$.fddata.setStoredValue(this.$.fddata.path, data);
       },
 
       feedbackPositivo: function(e, data) {

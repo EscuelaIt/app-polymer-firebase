@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+<dom-module id="juego-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      paper-card {
+        width: 250px;
+        margin: 15px;
+      }
+    </style>
+    <paper-card heading="[[juego.nombre]]">
+      <div class="card-content">
+        <p>
+          Objetivos: [[juego.objetivos]]
+        </p>
+        <p>
+          Edades: [[juego.edades]]
+        </p>
+      </div>
+    </paper-card>
+  </template>
+  <script>
+    Polymer({
+      is: 'juego-card',
+      properties: {
+        juego: Object
+      }
+    });
+  </script>
+</dom-module>

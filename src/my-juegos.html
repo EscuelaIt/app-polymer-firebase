@@ -11,7 +11,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="my-view1">
+<link rel="import" href="juegos/juego-card.html">
+<link rel="import" href="utils/underscore-element.html">
+
+
+<dom-module id="my-juegos">
   <template>
     <style include="shared-styles">
       :host {
@@ -22,16 +26,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="card">
-      <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+      <h1>Juegos</h1>
+      <template is="dom-repeat" items="[[juegos]]" as="juego" filter="filtro">
+        <juego-card juego="[[juego]]"></juego-card>
+      </template>
     </div>
   </template>
 
   <script>
     Polymer({
-      is: 'my-view1'
+      is: 'my-juegos',
+
+      properties: {
+        juegos: Array
+      },
+
+      filtro: function(item) {
+        var clon = _.clone(item);
+        clon.nombre = 'lalala';
+        console.log(item, clon);
+
+        if(item.nombre.indexOf('juego') === -1) {
+          return false
+        }
+        return true
+      }
     });
   </script>
 </dom-module>

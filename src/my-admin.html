@@ -1,0 +1,88 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+
+<link rel="import" href="admin/admin-datos.html">
+<link rel="import" href="admin/admin-juegos.html">
+
+
+<dom-module id="my-admin">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+
+    <app-route
+        route="{{route}}"
+        pattern="/admin/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"
+    ></app-route>
+
+    <div class="card">
+      <paper-tabs selected="{{routeData.page}}" attr-for-selected="page">
+        <paper-tab page="datos">Datos App</paper-tab>
+        <paper-tab page="juegos">Juegos</paper-tab>
+      </paper-tabs>
+      
+      <iron-pages selected="[[routeData.page]]" attr-for-selected="name">
+        <admin-datos
+          name="datos"
+          app-data="[[appData]]"
+        ></admin-datos>
+        <admin-juegos
+          name="juegos"
+        ></admin-juegos>
+      </iron-pages>
+      
+      
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-admin',
+
+      properties: {
+        route: {
+          type: Object,
+          notify: true
+        },
+        routeData: Object,
+        appData: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      observers: [
+        'ruta(routeData.page)'
+      ],
+
+      ruta: function(ruta){
+        console.log(ruta);
+        if(!ruta || ruta == ''){
+          this.set('routeData.page', 'datos');
+        }
+      },
+
+    });
+  </script>
+</dom-module>

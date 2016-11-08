@@ -1,0 +1,43 @@
+
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+
+<dom-module id="admin-datos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .acciones{
+        text-align: right;
+      }
+    </style>
+    <h1>Admin de los datos</h1>
+    <paper-input label="Nombre de la aplicación" value="{{appData.appName}}"></paper-input>
+    <paper-input label="Nombre del autor" value="{{appData.appCreator}}"></paper-input>
+    <p class="acciones">
+      
+      <paper-button raised on-tap="guardar">Guardar</paper-button>
+      
+    </p>
+  </template>
+  <script>
+    Polymer({
+      is: 'admin-datos',
+
+      properties: {
+        appData: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      guardar: function() {
+        this.fire('datos-modificados', this.appData)
+      } 
+    });
+  </script>
+</dom-module>
