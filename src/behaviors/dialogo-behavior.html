@@ -1,0 +1,19 @@
+<script>
+/**
+ * Ese componente asume que tenemos un elemento #dialog (Un elemento de la página tiene el id="dialogo") 
+ */
+DialogoBehavior = {
+  open: function() {
+    this.$.dialogo.open();
+    //this.fire('narrow-drawer')
+  },
+
+  close: function() {
+    this.$.dialogo.close();
+  },
+
+  // restaurarDrawer: function() {
+  //   this.fire('active-drawer')
+  // }
+};
+</script>

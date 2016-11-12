@@ -25,6 +25,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
+
+<link rel="import" href="../bower_components/iron-meta/iron-meta.html">
+
+
 <!--FIREBASE-->
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
@@ -59,13 +63,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .drawer-list a {
         display: block;
-
         padding: 0 16px;
-
         text-decoration: none;
-
         color: var(--app-secondary-color);
-
         line-height: 40px;
       }
 
@@ -92,6 +92,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       messaging-sender-id="350373671857"
       app="{{fbapp}}"
     ></firebase-app>
+
+    <iron-meta key="fbapp" value="[[fbapp]]"></iron-meta>
 
     <firebase-auth 
       id="auth"
@@ -163,6 +165,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <my-admin name="admin"
             route="{{route}}"
             app-data="[[appData]]"
+            logueado="[[logueado]]"
+            juegos="[[juegos]]"
           ></my-admin>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
@@ -197,7 +201,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       listeners: {
         'feedback-positivo': 'feedbackPositivo',
         'feedback-negativo': 'feedbackNegativo',
-        'datos-modificados': 'guardarDatosApp'
+        'datos-modificados': 'guardarDatosApp',
       },
 
       observers: [

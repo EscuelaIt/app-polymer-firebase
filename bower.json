@@ -22,7 +22,10 @@
     "paper-tabs": "PolymerElements/paper-tabs#^1.7.0",
     "paper-input": "PolymerElements/paper-input#^1.1.20",
     "paper-button": "PolymerElements/paper-button#^1.0.14",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "paper-item": "PolymerElements/paper-item#^1.2.1",
+    "iron-elements": "^1.0.10",
+    "paper-elements": "^1.0.7"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

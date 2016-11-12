@@ -36,7 +36,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}"
     ></app-route>
 
-    <div class="card">
+    <div class="card" hidden="[[logueado]]">
+      Esta sección es solo para usuarios
+    </div>
+    <div class="card" hidden="[[!logueado]]">
       <paper-tabs selected="{{routeData.page}}" attr-for-selected="page">
         <paper-tab page="datos">Datos App</paper-tab>
         <paper-tab page="juegos">Juegos</paper-tab>
@@ -49,6 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ></admin-datos>
         <admin-juegos
           name="juegos"
+          juegos="[[juegos]]"
         ></admin-juegos>
       </iron-pages>
       
@@ -69,7 +73,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         appData: {
           type: Object,
           notify: true
-        }
+        },
+        logueado: {
+          type: Boolean,
+          value: false
+        },
+        juegos: Array
       },
 
       observers: [

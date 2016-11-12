@@ -1,0 +1,32 @@
+
+<dom-module id="admin-juegos-formulario">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <paper-input label="Nombre" value="{{juego.nombre}}"></paper-input>
+    <paper-input label="Edades" value="{{juego.edades}}"></paper-input>
+    <paper-textarea label="Objetivos" value="{{juego.objetivos}}"></paper-textarea>
+  </template>
+  <script>
+    Polymer({
+      is: 'admin-juegos-formulario',
+      
+      properties: {
+        juego: {
+          type: Object,
+          notify: true,
+          value: function() {
+            return {
+              nombre: '',
+              edades: '',
+              objetivos: ''
+            }
+          }
+        }
+      },
+    });
+  </script>
+</dom-module>

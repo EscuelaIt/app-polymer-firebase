@@ -1,0 +1,41 @@
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+
+
+<dom-module id="admin-juegos-item">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    
+    <paper-icon-item> 
+      <iron-icon icon="label" item-icon></iron-icon>
+      <paper-item-body two-line>
+        <div>[[juego.nombre]]</div>
+        <div secondary>[[juego.objetivos]]</div>
+      </paper-item-body>
+      <paper-icon-button icon="create" class="botoneditar" on-tap="editarItem"></paper-icon-button>
+      <paper-icon-button icon="cancel" class="botonborrar" on-tap="borrarItem"></paper-icon-button>
+    </paper-icon-item>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'admin-juegos-item',
+
+      properties: {
+        juego: Object,
+      },
+
+      editarItem: function() {
+        this.fire('editar-juego', this.juego);
+      },
+      borrarItem: function() {
+        this.fire('borrar-juego', this.juego);
+      },
+
+    });
+  </script>
+</dom-module>

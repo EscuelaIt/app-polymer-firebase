@@ -1,0 +1,53 @@
+
+<dom-module id="admin-juegos-borrar">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      #dialogo{
+        --paper-dialog: {
+          width: 80vw;
+          max-width: 500px;
+        }
+      }
+      .cuerpo {
+        padding: 15px;
+      }
+    </style>
+    
+    <paper-dialog id="dialogo">
+      <h2>Borrar juego</h2>
+      <div class="cuerpo">
+        De verdad deseas borrar el juego: <b>{{juego.nombre}}</b>
+      </div>
+      <div class="buttons">
+        <paper-button on-tap="close">Cancelar</paper-button>
+        <paper-button on-tap="borrar" autofocus>Borrar</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'admin-juegos-borrar',
+
+      behaviors: [DialogoBehavior, EmisorFeedbackBehavior, FirebaseBehavior],
+      
+      properties: {
+        juego: Object
+      },
+
+      borrar: function() {
+        var ref = this.fbref('/juegos/' + this.juego.$key)
+        ref.remove()
+          .then(this.datosBorrados.bind(this))
+      },
+
+      datosBorrados: function() {
+        this.feedbackPositivo('Dato borrado');
+        this.close();
+      }
+
+    });
+  </script>
+</dom-module>

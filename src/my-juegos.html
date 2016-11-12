@@ -42,14 +42,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       filtro: function(item) {
-        var clon = _.clone(item);
-        clon.nombre = 'lalala';
-        console.log(item, clon);
-
-        if(item.nombre.indexOf('juego') === -1) {
-          return false
-        }
         return true
+        // var clon = _.clone(item);
+        // clon.nombre = 'lalala';
+        // console.log(item, clon);
+
+        // if(item.nombre.indexOf('juego') === -1) {
+        //   return false
+        // }
+        // return true
       }
     });
   </script>

@@ -1,16 +1,71 @@
 
+<link rel="import" href="admin-juegos-item.html">
+<link rel="import" href="admin-juegos-insertar.html">
+<link rel="import" href="admin-juegos-editar.html">
+<link rel="import" href="admin-juegos-borrar.html">
+<link rel="import" href="admin-juegos-formulario.html">
+
+
+
 <dom-module id="admin-juegos">
   <template>
     <style>
       :host {
         display: block;
       }
+      app-toolbar {
+        background-color: var(--toolbar-color, #666);
+        color: #fff;
+        margin-top: 10px;
+      }
+      app-toolbar paper-button{
+        --paper-button: font-size: .9em;
+      }
     </style>
-    juegos
+    <app-toolbar>
+      <div main-title>Juegos admin</div>
+      <paper-button on-tap="insertarJuego">
+        <iron-icon icon="add"></iron-icon>      
+        Insertar
+      </paper-button>  
+    </app-toolbar>
+
+    <template is="dom-repeat" items="[[juegos]]" as="juego">
+      <admin-juegos-item juego="{{juego}}"></admin-juegos-item>
+    </template>
+
+    <admin-juegos-insertar id="elinsertar"></admin-juegos-insertar>
+    <admin-juegos-editar id="eleditar"></admin-juegos-editar>
+    <admin-juegos-borrar id="elborrar"></admin-juegos-borrar>
+
   </template>
   <script>
     Polymer({
-      is: 'admin-juegos'
+      is: 'admin-juegos',
+
+      properties: {
+        juegos: Array
+      },
+
+      listeners: {
+        'editar-juego': 'editarJuego',
+        'borrar-juego': 'borrarJuego'
+      },
+
+      insertarJuego: function() {
+        this.$.elinsertar.open();
+      },
+
+      editarJuego: function(e, data) {
+        console.log('vamos a editar un juego');
+        this.$.eleditar.juego = data;
+        this.$.eleditar.open()
+      },
+      borrarJuego: function(e, data) {
+        console.log('vamos a borrar un juego');
+        this.$.elborrar.juego = data;
+        this.$.elborrar.open()
+      },
     });
   </script>
 </dom-module>

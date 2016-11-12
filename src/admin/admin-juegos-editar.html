@@ -1,0 +1,79 @@
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../behaviors/dialogo-behavior.html">
+<link rel="import" href="../behaviors/firebase-behavior.html">
+<link rel="import" href="../behaviors/emisor-feedback-behavior.html">
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+
+<link rel="import" href="../utils/underscore-element.html">
+
+
+
+<dom-module id="admin-juegos-editar">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      #dialogo{
+        --paper-dialog: {
+          width: 80vw;
+          max-width: 500px;
+        }
+      }
+    </style>
+
+    <paper-dialog id="dialogo">
+      <h2>Editar juego</h2>
+      <paper-dialog-scrollable>
+        <admin-juegos-formulario juego="{{juego}}"></admin-juegos-formulario>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button on-tap="close">Cancelar</paper-button>
+        <paper-button on-tap="editar" autofocus>Guardar</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'admin-juegos-editar',
+
+      behaviors: [DialogoBehavior, EmisorFeedbackBehavior, FirebaseBehavior],
+
+      properties: {
+        juego: Object
+      },
+
+      // eliminarKey: function(obj){
+      //   var res = {}
+      //   for(item in obj) {
+      //     if(item != '$key') {
+      //       res[item] = obj[item];
+      //     }
+      //   }
+      //   return res;
+      // },
+
+      editar: function() {
+        var refJuego = this.fbref(this.fb__juegosOne(this.juego.$key));
+        //refJuego.set(this.eliminarKey(this.juego))
+        var juegoSinKey = _.omit(this.juego, '$key');
+        refJuego.set(juegoSinKey)
+          .then(this.datosEditados.bind(this))
+          .catch(this.errorEdicion.bind(this))
+      },
+
+      datosEditados: function() {
+        this.feedbackPositivo('Dato editado');
+        this.close();
+      },
+
+      errorEdicion: function() {
+        this.feedbackNegativo('Error edición')
+      }
+    });
+  </script>
+</dom-module>

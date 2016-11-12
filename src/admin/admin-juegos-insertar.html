@@ -1,0 +1,74 @@
+
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../behaviors/dialogo-behavior.html">
+<link rel="import" href="../behaviors/emisor-feedback-behavior.html">
+<link rel="import" href="../behaviors/firebase-behavior.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<dom-module id="admin-juegos-insertar">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      paper-dialog{
+        --paper-dialog: {
+          width: 50vw;
+        }
+      }
+      .cuerpo {
+        padding: 15px;
+      }
+      @media(max-width: 700px) {
+         paper-dialog {
+          --paper-dialog: {
+            width: 80vw;
+          }
+        }
+      }
+    </style>
+    
+    <!--<iron-meta id="meta"></iron-meta>-->
+
+    <paper-dialog id="dialogo">
+      <h2>Insertar Juego</h2>
+        <paper-dialog-scrollable>
+          <admin-juegos-formulario juego="{{juego}}"></admin-juegos-formulario>
+        </paper-dialog-scrollable>
+
+      <div class="buttons">
+        <paper-button on-tap="close">Cancelar</paper-button>
+        <paper-button on-tap="insertar" autofocus>Guardar</paper-button>
+      </div>
+    </paper-dialog>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'admin-juegos-insertar',
+
+      behaviors: [DialogoBehavior, EmisorFeedbackBehavior, FirebaseBehavior],
+
+      properties: {
+        juego: Object
+      },
+
+      insertar: function() {
+        var that = this;
+        var fbapp = document.createElement('iron-meta').byKey('fbapp');
+        //console.log(fbapp);
+        var refNuevoJuego = fbapp.database().ref('/juegos').push();
+        refNuevoJuego.set(this.juego)
+          .then(function() {
+            that.feedbackPositivo('Elemento insertado')
+            that.close()
+          })
+          .catch(function() {
+            that.feedbackNegativo('Elemento no se ha podido insertar')
+          })
+      }
+    });
+  </script>
+</dom-module>
