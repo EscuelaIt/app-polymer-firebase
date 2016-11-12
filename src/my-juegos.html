@@ -14,6 +14,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="juegos/juego-card.html">
 <link rel="import" href="utils/underscore-element.html">
 
+<link rel="import" href="juegos/juego-buscador.html">
+
 
 <dom-module id="my-juegos">
   <template>
@@ -23,13 +25,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+
+      .juegos{
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+        @apply(--layout-around-justified);
+      }
+      juego-card{
+        @apply(--layout-horizontal);
+      }
     </style>
 
     <div class="card">
       <h1>Juegos</h1>
-      <template is="dom-repeat" items="[[juegos]]" as="juego" filter="filtro">
-        <juego-card juego="[[juego]]"></juego-card>
-      </template>
+      <juego-buscador></juego-buscador>
+      <div class="juegos">
+        <template is="dom-repeat" items="[[juegos]]" as="juego" filter="filtro">
+          <juego-card juego="[[juego]]"></juego-card>
+        </template>
+      </div>
     </div>
   </template>
 

@@ -1,0 +1,106 @@
+
+<link rel="import" href="../behaviors/emisor-feedback-behavior.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+
+<dom-module id="juego-buscador">
+  <template>
+    <!--<style include="shared-styles"></style>-->
+    <style>
+      .formbuscar{
+        padding: 10px 15px;
+        background-color: var(--light-primary-color);
+        margin: 10px 20px;
+        border-radius: 5px;
+        @apply(--layout-horizontal);
+        color: #666;
+      }
+      span{
+        margin: 8px 15px 0;
+      }
+      input{
+        padding: 8px;
+        font-size: 1.1em;
+        border-radius: 5px;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        outline: none;
+        border: none;
+        color: #666;
+        background-color: #f5f5f5;
+        @apply(--layout-flex);
+        margin-right: 10px;
+      }
+      paper-icon-button{
+        --paper-icon-button: {
+          color: var(--accent-color);
+        }
+      }
+      @media(max-width: 600px) {
+        span{
+          display: none;
+        }
+        input{
+          display: block;
+          width: 100px;
+        }
+        paper-icon-button{
+          --paper-icon-button: {
+            color: var(--accent-color);          
+            min-width: 50px;
+          }
+        }
+      }
+    </style>
+
+    <div class="formbuscar">
+      <span>Buscar:</span> 
+      <input type="text" value="{{query::input}}">
+      <paper-icon-button icon="[[iconborrar]]" on-tap="borrarBusqueda"></paper-icon-button> 
+    </div>
+
+    
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'juego-buscador',
+
+      behaviors: [EmisorFeedbackBehavior],
+
+      properties: {
+        query: {
+          type: String,
+          notify: true,
+          value: ''
+        },
+        iconborrar: {
+          type: String,
+          value: "search",
+          computed: 'saberSiOcultar(query)'
+        },
+        retardo: Object,
+      },
+
+      saberSiOcultar: function(q) {
+        if(q == undefined || q.length === 0){
+          return "search";
+        }
+        return "cancel";
+      },
+
+      borrarBusqueda: function() {
+        if (this.query=='') {
+          this.feedbackPositivo('Escribe alguna cosa en el campo de texto');
+        } else {
+          this.query = '';
+        }
+      },
+
+    });
+  })();
+  </script>
+</dom-module>
