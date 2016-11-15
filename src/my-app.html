@@ -24,10 +24,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 
 <link rel="import" href="../bower_components/iron-meta/iron-meta.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-dropdown/iron-dropdown.html">
+
+
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-down-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-down-animation.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
 
 
 <!--FIREBASE-->
@@ -38,6 +50,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!--MY ELEMENTS-->
 
+<link rel="import" href="login/boton-login.html">
+
 
 <dom-module id="my-app">
   <template>
@@ -46,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         --app-primary-color: #4285f4;
         --app-secondary-color: black;
-
+        --accent-color: #f80;
         display: block;
       }
 
@@ -83,6 +97,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: .7em;
         margin-left: 10px;
       }
+
+      
     </style>
 
     <firebase-app 
@@ -121,9 +137,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <app-drawer-layout fullbleed responsive-width="800px">
+    <app-drawer-layout fullbleed responsive-width="800px" id="layoutprincipal">
       <!-- Drawer content -->
-      <app-drawer>
+      <app-drawer id="drawerpanel">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="juegos" href="/juegos">Juegos</a>
@@ -147,17 +163,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>Juegos</div>
-            <paper-icon-button icon="account-circle" on-tap="loguearse" hidden="{{logueado}}"></paper-icon-button>
+
             <paper-icon-button icon="exit-to-app" on-tap="logout" hidden="{{!logueado}}"></paper-icon-button>
+            
+            <boton-login></boton-login>
+            
 
           </app-toolbar>
         </app-header>
 
-        <iron-pages
+        <neon-animated-pages
             selected="[[page]]"
             attr-for-selected="name"
             fallback-selection="view404"
-            role="main">
+            role="main"
+            entry-animation="scale-up-animation"
+            exit-animation="scale-down-animation"
+        >
           <my-juegos name="juegos"
             juegos="[[juegos]]"
           ></my-juegos>
@@ -170,7 +192,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             juegos="[[juegos]]"
           ></my-admin>
           <my-view404 name="view404"></my-view404>
-        </iron-pages>
+        </neon-animated-pages>
       </app-header-layout>
     </app-drawer-layout>
 
@@ -203,6 +225,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'feedback-positivo': 'feedbackPositivo',
         'feedback-negativo': 'feedbackNegativo',
         'datos-modificados': 'guardarDatosApp',
+        'login-request': 'loguearse'
       },
 
       observers: [
@@ -211,6 +234,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _routePageChanged: function(page) {
         this.page = page || 'juegos';
+        if(this.$.layoutprincipal.narrow) {
+          this.$.drawerpanel.close();
+        }
       },
 
       _pageChanged: function(page) {
@@ -280,6 +306,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.eltoastnegativo.text = data
         this.$.eltoastnegativo.open();
       },
+
+      
     });
   </script>
 </dom-module>

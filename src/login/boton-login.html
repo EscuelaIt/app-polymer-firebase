@@ -1,0 +1,86 @@
+
+<dom-module id="boton-login">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .dropdown-content{
+        padding: 15px;
+        background-color: var(--light-primary-color, #f5f5f5);
+        color: #666;
+        border-radius: 0.3em;
+        box-shadow: 2px 2px 3px #999;
+        width: 280px;
+        font-size: 12pt;
+      }
+      .dropdown-content paper-button{
+        color: var(--accent-color);
+      }
+    </style>
+    <paper-icon-button icon="account-circle" on-tap="abrirDrop" hidden="{{logueado}}"></paper-icon-button>
+    <iron-dropdown horizontal-align="right"
+      horizontal-align="right" 
+      vertical-align="top" 
+      vertical-offset="40"
+      id="dropd"
+      open-animation-config="[[animacionEntrada]]" 
+      close-animation-config="[[animacionSalida]]" 
+      >
+      <div class="dropdown-content">
+        
+        <paper-button raised on-tap="loguearse">Loguearse con Google</paper-button>
+          
+      </div>
+    </iron-dropdown>
+  </template>
+  <script>
+    Polymer({
+      is: 'boton-login',
+
+      properties: {
+        animacionEntrada: {
+          type: Array,
+          value: function() {
+            return [
+              {
+                name: 'fade-in-animation',
+                timing: {
+                  duration: 3000
+                }
+              }
+            ]
+          }
+        },
+        animacionSalida: {
+          type: Array,
+          value: function() {
+            return [
+              {
+                name: 'fade-out-animation',
+                timing: {
+                  duration: 3000,
+                  delay: 3000
+                }
+              },
+              {
+                name: 'slide-down-animation',
+                timing: {
+                  duration: 6000
+                }
+              },
+            ]
+          }
+        }
+      },
+
+      abrirDrop: function() {
+        this.$.dropd.open();
+      },
+
+      loguearse: function() {
+        this.fire('login-request');
+      },
+    });
+  </script>
+</dom-module>

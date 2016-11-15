@@ -9,7 +9,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-runner-behavior.html">
+
 <link rel="import" href="shared-styles.html">
+
+<link rel="import" href="animation/rebote-animation.html">
+
+
 
 <dom-module id="my-view2">
   <template>
@@ -18,20 +24,92 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
 
         padding: 10px;
+        
+      }
+      #animar{
+        background-color: palevioletred;
+        padding: 15px;
+        width: 350px;
+        display: none;
+        color: #fff;
+        margin-top: 15px;
       }
     </style>
 
     <div class="card">
       <div class="circle">2</div>
       <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+      
+      <paper-button raised on-tap="mostrar">Mostrar</paper-button>
+      <paper-button raised on-tap="ocultar">Ocultar</paper-button>
+      
+      <div id="animar">
+        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
+        <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+      </div>
     </div>
   </template>
 
   <script>
     Polymer({
-      is: 'my-view2'
+      is: 'my-view2',
+
+      behaviors: [Polymer.NeonAnimationRunnerBehavior],
+
+      properties: {
+        mostrando: {
+          type: Boolean,
+          value: false
+        },
+        animationConfig: {
+          type: Object,
+          value: function() {
+            return {
+              'entry': {
+                name: 'rebote-animation',
+                timing: {
+                  duration: 3000
+                },
+                node: this.$.animar
+              },
+              'exit': {
+                name: 'scale-down-animation',
+                timing: {
+                  duration: 3000
+                },
+                node: this.$.animar
+              }
+            }
+          }
+        }
+      },
+
+      listeners: {
+        'neon-animation-finish': '_onNeonAnimationFinish'
+      },
+
+      _onNeonAnimationFinish: function() {
+        console.log('ya');
+        if(!this.mostrando) {
+          this.$.animar.style.display = 'none'; 
+        }
+      },
+
+      ready: function(){
+        this.mostrar();
+      },
+
+      mostrar: function() {
+        this.mostrando = true;
+        this.$.animar.style.display = 'block';
+        this.cancelAnimation();
+        this.playAnimation('entry');
+      },
+      ocultar: function() {
+        this.mostrando = false;  
+        this.cancelAnimation();      
+        this.playAnimation('exit');       
+      }
     });
   </script>
 </dom-module>

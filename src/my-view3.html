@@ -10,6 +10,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+
+<link rel="import" href="static/tab2-page.html">
+<link rel="import" href="static/tab3-page.html">
+
 
 <dom-module id="my-view3">
   <template>
@@ -21,17 +27,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <div class="card">
-      <div class="circle">3</div>
-      <h1>View Three</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
-    </div>
+    <paper-tabs selected="{{tabSelected}}">
+      <paper-tab>TAB 2</paper-tab>
+      <paper-tab>TAB 3</paper-tab>
+    </paper-tabs>
+
+    <neon-animated-pages
+      selected="{{tabSelected}}"
+    >
+      <tab2-page></tab2-page>
+      <tab3-page></tab3-page>
+      
+    </neon-animated-pages>
+
   </template>
 
   <script>
     Polymer({
-      is: 'my-view3'
+      is: 'my-view3',
+
+      behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+      
+      properties: {
+        tabSelected: {
+          type: Number,
+          value: 0
+        }
+      },
     });
   </script>
 </dom-module>

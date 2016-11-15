@@ -1,0 +1,76 @@
+
+<link rel="import" href="../../bower_components/neon-animation/animations/slide-from-right-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/slide-from-left-animation.html">
+
+
+<dom-module id="tab3-page">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      #barra{
+        background-color: var(--app-primary-color);
+        color: #fff;
+      }
+    </style>
+    <app-toolbar id="barra">
+      <div main-title>Esta toolbar me mola</div>
+    </app-toolbar>
+    <h1>tab 3</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti voluptatibus libero mollitia sed consequatur maxime, possimus eaque. Adipisci possimus reprehenderit sit rem cumque repellat libero excepturi, sequi dolorum delectus. At?</p>
+    <p>Dolore ab, reiciendis commodi pariatur sapiente quidem? Dicta excepturi ipsa, facilis quam placeat officiis atque autem eligendi aliquid quae quos nulla. Reiciendis aperiam maiores, quaerat consequatur optio. Rem dolorum, ratione.</p>
+    <p>Ratione tempora a ullam quas pariatur, natus atque facilis architecto sapiente, dignissimos velit, culpa provident repudiandae esse nemo nulla quibusdam quidem molestias. Voluptatem animi, amet aliquam voluptas. Deserunt, quidem, qui?</p>
+    <p>Placeat ducimus nulla, aliquid quam adipisci ipsum facere nostrum animi, aspernatur numquam. Natus quo, doloremque sunt quasi quae maxime nulla quos impedit nemo perspiciatis, dolorem veniam fugiat culpa, nisi aspernatur!</p>
+    <p>Placeat facere veniam molestiae libero dolores quaerat dolorum at earum doloremque, porro, accusamus aspernatur recusandae nulla architecto ratione veritatis quia? Enim voluptate, amet quo possimus quidem cupiditate aut iure suscipit.</p>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'tab3-page',
+
+      behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+
+      properties: {
+        animationConfig: {
+          type: Object,
+          value: function() {
+            return {
+              'entry': [
+                {
+                  name: 'slide-from-left-animation',
+                  node: this,
+                  timing: {
+                    duration: 3000
+                  },
+                },  
+                {
+                  name: 'hero-animation',
+                  id: 'compartirde2a3',
+                  toPage: this,
+                  timing: {
+                    duration: 3000
+                  },
+                }
+              ], 
+              'exit': {
+                name: 'fade-out-animation',
+                node: this,
+                timing: {
+                  duration: 1000
+                }
+              }
+            }
+          }
+        },
+        sharedElements: {
+          value: function() {
+            return {
+              'compartirde2a3': this.$.barra
+            }
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>
