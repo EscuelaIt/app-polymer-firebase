@@ -1,0 +1,38 @@
+
+
+<dom-module id="juego-fav">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .favorito {
+        color: red;
+      }
+    </style>
+
+    <iron-icon icon="star" id="fav"></iron-icon>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'juego-fav',
+
+      properties: {
+        favorito: {
+          type: Boolean,
+          value: false
+        },
+      },
+
+      listeners: {
+        'tap': 'setFav'
+      },
+
+      setFav: function() {
+        this.favorito = !this.favorito
+        this.toggleClass('favorito', this.favorito, this.$.fav);
+      }
+    });
+  </script>
+</dom-module>

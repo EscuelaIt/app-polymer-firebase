@@ -16,6 +16,10 @@ module.exports = {
   navigateFallback: '/index.html',
 
   navigateFallbackWhitelist: [
-    /^\/view1\//
+     /^\/admin\//,
+     /^\/juegos\//,
+     /^\/view2\//,
+     /^\/view2\//,
+     /^\/view404\//
   ]
 };

@@ -17,6 +17,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
@@ -40,6 +42,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+
+<!--BEHAVIORS-->
+<link rel="import" href="behaviors/firebase-behavior.html">
 
 
 <!--FIREBASE-->
@@ -117,6 +122,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       user="{{user}}"
       provider="google"
       signed-in="{{logueado}}"
+      online="{{online}}"
     ></firebase-auth>
 
     <firebase-document
@@ -126,9 +132,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     ></firebase-document>
 
     <firebase-query
-      path="/juegos"
-      data="{{juegos}}"
+      path="[[locJuegos]]"
+      data="{{juegosLive}}"
     ></firebase-query>
+    
+    <app-indexeddb-mirror
+        key="juegos"
+        data="{{juegosLive}}"
+        persisted-data="{{juegos}}">
+    </app-indexeddb-mirror>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -136,6 +148,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         pattern="/:page"
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
+
+    
 
     <app-drawer-layout fullbleed responsive-width="800px" id="layoutprincipal">
       <!-- Drawer content -->
@@ -166,8 +180,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <paper-icon-button icon="exit-to-app" on-tap="logout" hidden="{{!logueado}}"></paper-icon-button>
             
-            <boton-login></boton-login>
-            
+            <boton-login hidden="{{logueado}}"></boton-login>
+            <iron-icon icon="cloud-off" hidden="[[online]]"></iron-icon>
 
           </app-toolbar>
         </app-header>
@@ -188,8 +202,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <my-admin name="admin"
             route="{{route}}"
             app-data="[[appData]]"
-            logueado="[[logueado]]"
             juegos="[[juegos]]"
+            logueado="[[logueado]]"
+            online="[[online]]"
           ></my-admin>
           <my-view404 name="view404"></my-view404>
         </neon-animated-pages>
@@ -205,6 +220,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'my-app',
 
+      behaviors: [FirebaseBehavior],
+
       properties: {
         page: {
           type: String,
@@ -218,7 +235,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         user: Object,
         fbapp: Object,
         appData: Object,
-        juegos: Array
+        juegos: Array,
+        online: {
+          type: Boolean,
+          value: true
+        },
+        locJuegos: {
+          type: String,
+          value: function() {
+            return this.fb__juegosAll();
+          }
+        }
       },
 
       listeners: {

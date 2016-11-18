@@ -36,10 +36,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}"
     ></app-route>
 
-    <div class="card" hidden="[[logueado]]">
-      Esta sección es solo para usuarios
+    <div class="card" hidden="[[operativo]]">
+      Esta sección es solo para usuarios y tienes que tener conexión a internet
     </div>
-    <div class="card" hidden="[[!logueado]]">
+    <div class="card" hidden="[[!operativo]]">
       <paper-tabs selected="{{routeData.page}}" attr-for-selected="page">
         <paper-tab page="datos">Datos App</paper-tab>
         <paper-tab page="juegos">Juegos</paper-tab>
@@ -78,7 +78,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           value: false
         },
-        juegos: Array
+        juegos: Array,
+        online: Boolean,
+        operativo: {
+          type: Boolean,
+          computed: '_estoyOperativo(online, logueado)'
+        }
       },
 
       observers: [
@@ -91,6 +96,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.set('routeData.page', 'datos');
         }
       },
+
+      _estoyOperativo: function(online, logueado){
+        if(online && logueado)
+          return true;
+        return false;
+      }
 
     });
   </script>

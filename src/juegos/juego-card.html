@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 
+<link rel="import" href="juego-fav.html">
+
 <dom-module id="juego-card">
   <template>
     <style>
@@ -20,13 +22,38 @@
           Edades: [[juego.edades]]
         </p>
       </div>
+      <div class="card-actions">
+        <juego-fav id="elfav" on-tap="toggleFav"></juego-fav>
+      </div>
     </paper-card>
   </template>
   <script>
     Polymer({
       is: 'juego-card',
       properties: {
-        juego: Object
+        juego: Object,
+        favoritos: {
+          type: Array
+        }
+      },
+
+      observers: [
+        'nuevosFavoritos(favoritos, juego)'
+      ],
+
+      nuevosFavoritos: function(favArray, juego) {
+        //console.log('FAV ARRAY', favArray);
+        var index = favArray.indexOf(juego.$key);
+        if (index !== -1) {
+          this.$.elfav.setFav();
+        }
+      },
+
+      toggleFav: function() {
+        this.fire('toggle-fav', {
+          isFav: this.$.elfav.favorito,
+          id: this.juego.$key
+        })
       }
     });
   </script>

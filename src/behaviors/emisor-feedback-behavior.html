@@ -1,10 +1,10 @@
 <script>
 EmisorFeedbackBehavior = {
-  feedbackPositivo(texto) {
+  feedbackPositivo: function(texto) {
     this.fire('feedback-positivo', texto);
   },
   
-  feedbackNegativo(texto) {
+  feedbackNegativo: function(texto) {
     this.fire('feedback-negativo', texto);
   }
 

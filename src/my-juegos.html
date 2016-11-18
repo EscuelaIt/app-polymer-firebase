@@ -17,6 +17,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="juegos/juego-buscador.html">
 
 
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+
+
+
 <dom-module id="my-juegos">
   <template>
     <style include="shared-styles">
@@ -36,12 +40,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <app-localstorage-document 
+      id="elstore"
+      key="fav" 
+      data="{{favoritos}}"
+    ></app-localstorage-document>
+
     <div class="card">
       <h1>Juegos</h1>
       <juego-buscador></juego-buscador>
       <div class="juegos">
         <template is="dom-repeat" items="[[juegos]]" as="juego" filter="filtro">
-          <juego-card juego="[[juego]]"></juego-card>
+          <juego-card juego="[[juego]]" favoritos="[[favoritos]]"></juego-card>
         </template>
       </div>
     </div>
@@ -52,7 +62,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'my-juegos',
 
       properties: {
-        juegos: Array
+        juegos: Array,
+        favoritos: {
+          type: Array,
+          value: function(){
+            return [];
+          }
+        }
+      },
+
+      listeners: {
+        'toggle-fav': 'toggleFav'
       },
 
       filtro: function(item) {
@@ -65,6 +85,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         //   return false
         // }
         // return true
+      },
+
+      toggleFav: function(e, data) {
+
+        console.log(data);
+        var index = this.favoritos.indexOf(data.id);
+        if(data.isFav && index == -1) {
+          //this.favoritos.push(data.id) NO HACER USO DE MÉTODOS NATIVOS DEL Array
+          this.push('favoritos', data.id);
+        }
+        if(!data.isFav && index != -1) {
+          this.splice('favoritos', index, 1);
+        }
+        this.$.elstore.save('fav');
+        console.log('favs:', this.favoritos)
       }
     });
   </script>

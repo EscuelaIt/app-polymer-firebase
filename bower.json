@@ -26,7 +26,8 @@
     "paper-item": "PolymerElements/paper-item#^1.2.1",
     "iron-elements": "^1.0.10",
     "paper-elements": "^1.0.7",
-    "neon-animation": "PolymerElements/neon-animation#^1.2.4"
+    "neon-animation": "PolymerElements/neon-animation#^1.2.4",
+    "app-storage": "PolymerElements/app-storage#^0.9.7"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
