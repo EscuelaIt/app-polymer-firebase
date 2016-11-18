@@ -17,6 +17,9 @@
       .dropdown-content paper-button{
         color: var(--accent-color);
       }
+      paper-button{
+        background: #ddd;
+      }
     </style>
     <paper-icon-button icon="account-circle" on-tap="abrirDrop" hidden="{{logueado}}"></paper-icon-button>
     <iron-dropdown horizontal-align="right"
@@ -46,7 +49,7 @@
               {
                 name: 'fade-in-animation',
                 timing: {
-                  duration: 3000
+                  duration: 1500
                 }
               }
             ]
@@ -59,14 +62,14 @@
               {
                 name: 'fade-out-animation',
                 timing: {
-                  duration: 3000,
-                  delay: 3000
+                  duration: 700,
+                  delay: 700
                 }
               },
               {
                 name: 'slide-down-animation',
                 timing: {
-                  duration: 6000
+                  duration: 1500
                 }
               },
             ]
@@ -80,6 +83,7 @@
 
       loguearse: function() {
         this.fire('login-request');
+        this.$.dropd.close();
       },
     });
   </script>
