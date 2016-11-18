@@ -1,25 +1,14 @@
 
+
+<link rel="import" href="../styles/dropdown-styles.html">
+
+
 <dom-module id="boton-login">
   <template>
-    <style>
+    <style include="dropdown-styles">
       :host {
         display: block;
-      }
-      .dropdown-content{
-        padding: 15px;
-        background-color: var(--light-primary-color, #f5f5f5);
-        color: #666;
-        border-radius: 0.3em;
-        box-shadow: 2px 2px 3px #999;
-        width: 280px;
-        font-size: 12pt;
-      }
-      .dropdown-content paper-button{
-        color: var(--accent-color);
-      }
-      paper-button{
-        background: #ddd;
-      }
+      }  
     </style>
     <paper-icon-button icon="account-circle" on-tap="abrirDrop" hidden="{{logueado}}"></paper-icon-button>
     <iron-dropdown horizontal-align="right"
