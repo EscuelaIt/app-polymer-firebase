@@ -1,0 +1,45 @@
+<script>
+
+DropdownBehavior = {
+
+  properties: {
+    animacionEntrada: {
+      type: Array,
+      value: function() {
+        return [
+          {
+            name: 'fade-in-animation',
+            timing: {
+              duration: 1500
+            }
+          }
+        ]
+      }
+    },
+    animacionSalida: {
+      type: Array,
+      value: function() {
+        return [
+          {
+            name: 'fade-out-animation',
+            timing: {
+              duration: 700,
+              delay: 700
+            }
+          },
+          {
+            name: 'slide-down-animation',
+            timing: {
+              duration: 1500
+            }
+          },
+        ]
+      }
+    }
+  },
+
+  abrirDrop: function() {
+    this.$.dropd.open();
+  },
+}
+</script>
