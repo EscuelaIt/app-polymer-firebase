@@ -54,6 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!--MY ELEMENTS-->
 <link rel="import" href="login/boton-login.html">
+<link rel="import" href="login/boton-loged-in.html">
 <link rel="import" href="my-icons.html">
 <link rel="import" href="styles/shared-styles.html">
 
@@ -178,11 +179,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>Juegos</div>
 
-            <paper-icon-button icon="exit-to-app" on-tap="logout" hidden="{{!logueado}}"></paper-icon-button>
-            
             <boton-login hidden="{{logueado}}"></boton-login>
+            <boton-loged-in hidden="{{!logueado}}"></boton-loged-in>
+            
             <iron-icon icon="cloud-off" hidden="[[online]]"></iron-icon>
-
           </app-toolbar>
         </app-header>
 
@@ -252,7 +252,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'feedback-positivo': 'feedbackPositivo',
         'feedback-negativo': 'feedbackNegativo',
         'datos-modificados': 'guardarDatosApp',
-        'login-request': 'loguearse'
+        'login-request': 'loguearse',
+        'logout-request': 'logout'
       },
 
       observers: [

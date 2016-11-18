@@ -4,37 +4,35 @@
 <link rel="import" href="../behaviors/dropdown-behavior.html">
 
 
-<dom-module id="boton-login">
+<dom-module id="boton-loged-in">
   <template>
     <style include="dropdown-styles">
       :host {
         display: block;
       }  
     </style>
-    <paper-icon-button icon="account-circle" on-tap="abrirDrop" hidden="{{logueado}}"></paper-icon-button>
+    <paper-icon-button icon="exit-to-app" on-tap="abrirDrop"></paper-icon-button>
     <iron-dropdown horizontal-align="right"
       horizontal-align="right" 
       vertical-align="top" 
       vertical-offset="40"
       id="dropd"
       open-animation-config="[[animacionEntrada]]" 
-      close-animation-config="[[animacionSalida]]"   
+      close-animation-config="[[animacionSalida]]" 
     >
       <div class="dropdown-content">
-        
-        <paper-button raised on-tap="loguearse">Loguearse con Google</paper-button>
-          
+        <paper-button raised on-tap="logout">Cerrar sesión</paper-button>
       </div>
     </iron-dropdown>
   </template>
   <script>
     Polymer({
-      is: 'boton-login',
+      is: 'boton-loged-in',
 
       behaviors: [DropdownBehavior],
 
-      loguearse: function() {
-        this.fire('login-request');
+      logout: function() {
+        this.fire('logout-request');
         this.$.dropd.close();
       },
     });
