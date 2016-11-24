@@ -3,6 +3,8 @@
 <link rel="import" href="../styles/dropdown-styles.html">
 <link rel="import" href="../behaviors/dropdown-behavior.html">
 
+<link rel="import" href="../notificaciones/gestion-notificaciones.html">
+
 
 <dom-module id="boton-loged-in">
   <template>
@@ -10,6 +12,17 @@
       :host {
         display: block;
       }  
+      p{
+        height: 24px;
+        margin: 0 0 25px 0;
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--app-primary-color);
+      }
+      .notif{
+        margin-bottom: 20px;
+      }
+      
     </style>
     <paper-icon-button icon="exit-to-app" on-tap="abrirDrop"></paper-icon-button>
     <iron-dropdown horizontal-align="right"
@@ -21,6 +34,10 @@
       close-animation-config="[[animacionSalida]]" 
     >
       <div class="dropdown-content">
+        <p>[[datosUser.nombre]]</p>
+        <div class="notif">
+          <gestion-notificaciones user="[[user]]" datos-user="[[datosUser]]"></gestion-notificaciones>
+        </div>
         <paper-button raised on-tap="logout">Cerrar sesión</paper-button>
       </div>
     </iron-dropdown>
@@ -30,6 +47,13 @@
       is: 'boton-loged-in',
 
       behaviors: [DropdownBehavior],
+
+      properties: {
+        datosUser: Object,
+        user: Object
+      },
+
+      
 
       logout: function() {
         this.fire('logout-request');

@@ -112,7 +112,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       database-url="https://clases-polymer.firebaseio.com"
       api-key="AIzaSyCWclFfWcrfee7jI9-SlJziiraMQbluGW8"
       storage-bucket="clases-polymer.appspot.com"
-      messaging-sender-id="350373671857"
+      messaging-sender-id="583897828557"
       app="{{fbapp}}"
     ></firebase-app>
 
@@ -125,6 +125,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       signed-in="{{logueado}}"
       online="{{online}}"
     ></firebase-auth>
+
+    <firebase-document
+      path="[[locUser]]"
+      data="{{datosUser}}"
+    ></firebase-document>
 
     <firebase-document
       id="fddata"
@@ -180,7 +185,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div main-title>Juegos</div>
 
             <boton-login hidden="{{logueado}}"></boton-login>
-            <boton-loged-in hidden="{{!logueado}}"></boton-loged-in>
+            <boton-loged-in user="[[user]]" datos-user="[[datosUser]]" hidden="{{!logueado}}"></boton-loged-in>
             
             <iron-icon icon="cloud-off" hidden="[[online]]"></iron-icon>
           </app-toolbar>
@@ -245,6 +250,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: function() {
             return this.fb__juegosAll();
           }
+        },
+        datosUser: Object,
+        locUser: {
+          type: String,
+          computed: 'fb__userOne(user.uid)',
         }
       },
 
@@ -253,12 +263,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'feedback-negativo': 'feedbackNegativo',
         'datos-modificados': 'guardarDatosApp',
         'login-request': 'loguearse',
-        'logout-request': 'logout'
+        'logout-request': 'logout',
+        'almacenar-token': 'almacenarToken',
+        'desactivar-notificaciones': 'desactivarNotif',
+        'activar-notificaciones': 'activarNotif'
       },
 
       observers: [
         '_routePageChanged(routeData.page)'
       ],
+
+      almacenarToken: function(e, token) {
+        console.log('je padado por aki')
+        this.set('datosUser.token', token);
+      },
+
+      desactivarNotif: function(e, token) {
+        console.log('je padado por aki')
+        this.set('datosUser.notifRejected', true);
+      },
+
+      activarNotif: function(e, token) {
+        console.log('je padado por aki')
+        this.set('datosUser.notifRejected', false);
+      },
 
       _routePageChanged: function(page) {
         this.page = page || 'juegos';

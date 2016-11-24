@@ -1,0 +1,117 @@
+
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-messaging.html">
+<link rel="import" href="../behaviors/emisor-feedback-behavior.html">
+
+
+<dom-module id="gestion-notificaciones">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      paper-toggle-button{
+        --paper-toggle-button-label-color: #666;
+      }
+    </style>
+
+    <firebase-messaging 
+      id="messaging"
+      token="{{token}}"
+      on-message="handleMessage"
+      active="{{notifActivada}}"
+    ></firebase-messaging>
+
+    <paper-toggle-button id="activarNotif" active="[[seNotifica]]">Notificaciones</paper-toggle-button>
+  
+    <div hidden$="[[!token.length]]">
+      curl https://fcm.googleapis.com/fcm/send 
+      --header "Authorization:key={{authorizationKey}}" 
+      --header "Content-Type:application/json" 
+      -d '{ 
+        "notification": { 
+          "title": "Esto es un test", 
+          "body": "[[textoNotif]]", 
+          "icon": "/images/manifest/icon-96x96.png",
+          "click_action": "https://app.desarrolloweb.com" 
+        }, 
+        "to" : "{{token}}" 
+      }'
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'gestion-notificaciones',
+
+      behaviors: [EmisorFeedbackBehavior],
+
+      properties: {
+        token: {
+          type: String,
+          value: '',
+        },
+        authorizationKey: { 
+          type: String,
+          value: 'AIzaSyCieMGTfRPU2bxVWCN-Lg849r9_PdzXE_E'
+        },
+        textoNotif: {
+          type: String,
+          value: 'Bienvenidos a las notificaciones en un proyecto real'
+        },
+        user: Object,
+        datosUser: Object,
+        notifActivada: Boolean,
+        seNotifica: {
+          type: Boolean,
+          computed: 'calcularSiSeNotifica(datosUser,notifActivada)'
+        }
+      },
+
+      listeners: {
+        'activarNotif.change': 'cambiaPrefsNotif',
+      },
+
+      observers: [
+        'almacenarToken(token, user)'
+      ],
+
+      calcularSiSeNotifica: function(datosUser,notifActivada) {
+        if(datosUser && !datosUser.notifRejected && notifActivada) {
+          return true;
+        }
+        return false;
+      },
+
+      cambiaPrefsNotif: function() {
+        var that = this;
+        if(this.$.activarNotif.checked) {
+          this.fire('activar-notificaciones')
+          this.$.messaging.requestPermission()
+            .then(function() {
+              console.log('me han autorizado')
+              that.feedbackPositivo('Se ha autorizado');
+            })
+            .catch(function() {
+              console.log('No se ha autorizado')       
+              that.feedbackNegativo('No se ha autorizado recibir notificaciones');
+            });
+        } else {
+          this.fire('desactivar-notificaciones')          
+        }
+      },
+
+      almacenarToken: function(token, user) {
+        if(user && token){
+          this.fire('almacenar-token', token)
+        }
+      },
+
+      handleMessage: function(e, data) {
+        console.log(data);
+        this.feedbackPositivo('Has recibido una notificación: ' + data.message.notification.body);
+      }
+
+    });
+  </script>
+</dom-module>
