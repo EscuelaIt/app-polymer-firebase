@@ -26,6 +26,7 @@ FirebaseBehavior = {
     return '/users';
   },
   fb__userOne: function(id) {
+    console.log('uid', id)
     return this.fb__userAll() + '/' + id;
   },
 

@@ -108,15 +108,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-app 
-      auth-domain="clases-polymer.firebaseapp.com"
-      database-url="https://clases-polymer.firebaseio.com"
-      api-key="AIzaSyCWclFfWcrfee7jI9-SlJziiraMQbluGW8"
-      storage-bucket="clases-polymer.appspot.com"
+      auth-domain="projetopensar-f73e8.firebaseapp.com"
+      database-url="https://projetopensar-f73e8.firebaseio.com"
+      api-key="AIzaSyCVZ7fDxkY9vOBVZ0eVV4T6l3xWoJXagNc"
+      storage-bucket="projetopensar-f73e8.appspot.com"
       messaging-sender-id="350373671857"
       app="{{fbapp}}"
     ></firebase-app>
 
     <iron-meta key="fbapp" value="[[fbapp]]"></iron-meta>
+
+    
+
 
     <firebase-auth 
       id="auth"
@@ -130,6 +133,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       id="fddata"
       path="/appData"
       data="{{appData}}"
+    ></firebase-document>
+
+    <firebase-document
+      path="[[locUser]]"
+      data="{{datosUser}}"
     ></firebase-document>
 
     <firebase-query
@@ -158,6 +166,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="juegos" href="/juegos">Juegos</a>
+          <a name="contactos" href="/contactos">Contactos</a>
           <a name="view2" href="/view2">View Two</a>
           <a name="view3" href="/view3">View Three</a>
           <a name="admin" href="/admin/">Admin</a>
@@ -179,10 +188,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div main-title>Juegos</div>
 
-            <boton-login hidden="{{logueado}}"></boton-login>
-            <boton-loged-in hidden="{{!logueado}}"></boton-loged-in>
+            <boton-login hidden$="{{logueado}}"></boton-login>
+            <boton-loged-in hidden$="{{!logueado}}" datos-user="[[datosUser]]" token="[[token]]" user="[[user]]"></boton-loged-in>
             
-            <iron-icon icon="cloud-off" hidden="[[online]]"></iron-icon>
+            <iron-icon icon="cloud-off" hidden$="[[online]]"></iron-icon>
           </app-toolbar>
         </app-header>
 
@@ -198,6 +207,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             juegos="[[juegos]]"
           ></my-juegos>
           <my-view2 name="view2"></my-view2>
+          <my-contactos name="contactos"></my-contactos>
           <my-view3 name="view3"></my-view3>
           <my-admin name="admin"
             route="{{route}}"
@@ -223,6 +233,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       behaviors: [FirebaseBehavior],
 
       properties: {
+        token: String,
         page: {
           type: String,
           reflectToAttribute: true,
@@ -232,6 +243,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           value: false
         },
+        datosUser: Object,
         user: Object,
         fbapp: Object,
         appData: Object,
@@ -245,6 +257,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: function() {
             return this.fb__juegosAll();
           }
+        },
+        locUser: {
+          type: String,
+          computed: 'fb__userOne(user.uid)'
         }
       },
 
@@ -253,12 +269,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'feedback-negativo': 'feedbackNegativo',
         'datos-modificados': 'guardarDatosApp',
         'login-request': 'loguearse',
-        'logout-request': 'logout'
+        'logout-request': 'logout',
+        'escribir-token': 'escribirToken',
+        'bloquear-notificaciones': 'bloquearNotif',
+        'activar-notificaciones': 'activarNotif'
       },
 
       observers: [
         '_routePageChanged(routeData.page)'
       ],
+
+      escribirToken: function(e, token) {
+        console.log('token a escribir')
+        this.set('datosUser.token', token);
+      },
+      bloquearNotif: function(e) {
+        console.log('bloequar')
+        this.set('datosUser.noNotifications', true);
+      },
+      activarNotif: function(e) {
+        console.log('activar')
+        this.set('datosUser.noNotifications', false);
+      },
 
       _routePageChanged: function(page) {
         this.page = page || 'juegos';
@@ -266,6 +298,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.drawerpanel.close();
         }
       },
+
+
 
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
@@ -335,6 +369,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.eltoastnegativo.open();
       },
 
+      
       
     });
   </script>

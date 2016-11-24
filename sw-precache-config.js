@@ -15,11 +15,17 @@ module.exports = {
   ],
   navigateFallback: '/index.html',
 
+  runtimeCaching: [{
+    urlPattern: /^https:\/\/jsonplaceholder\.typicode\.com\/users/,
+    handler: 'networkFirst'
+  }],
+
   navigateFallbackWhitelist: [
      /^\/admin\//,
      /^\/juegos\//,
      /^\/view2\//,
-     /^\/view2\//,
+     /^\/view3\//,
+     /^\/contactos\//,
      /^\/view404\//
   ]
 };

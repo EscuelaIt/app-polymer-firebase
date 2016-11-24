@@ -1,0 +1,41 @@
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+
+<dom-module id="my-contactos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    
+    <iron-ajax
+       auto
+       url="https://jsonplaceholder.typicode.com/users/"
+       handle-as="json"
+       last-response="{{contactos}}"
+    ></iron-ajax>
+
+    <template is="dom-repeat" items="[[contactos]]">
+      <p>[[item.name]]</p>
+    </template>
+
+    <iron-ajax
+       auto
+       url="https://jsonplaceholder.typicode.com/posts/"
+       handle-as="json"
+       last-response="{{posts}}"></iron-ajax>
+
+    <template is="dom-repeat" items="[[posts]]">
+      <p><b>POST:</b> [[item.title]]</p>
+    </template>
+
+    
+  </template>
+  <script>
+    Polymer({
+      is: 'my-contactos'
+
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,111 @@
+
+
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../../bower_components/polymerfire/firebase-messaging.html">
+
+
+<dom-module id="gestion-notificaciones">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      
+      paper-toggle-button {
+        --paper-toggle-button-label-color: #666;
+      }
+      
+    </style>
+
+    <firebase-messaging 
+      id="messaging"
+      token="{{token}}"
+      on-message="handleMessage"
+      active="{{notifActive}}"
+    ></firebase-messaging>
+
+    <paper-toggle-button id="eltoggle" active="{{notifActivePermitidas}}">Notificaciones</paper-toggle-button>
+
+    curl https://fcm.googleapis.com/fcm/send 
+      --header "Authorization:key={{authorizationKey}}" 
+      --header "Content-Type:application/json" 
+      -d '{ 
+        "notification": { 
+          "title": "Esto es un test", 
+          "body": "[[textoNotif]]", 
+          "icon": "/images/manifest/icon-96x96.png",
+          "click_action": "https://app.desarrolloweb.com" 
+        }, 
+        "to" : "{{token}}" 
+      }'
+
+  </template>
+  <script>
+    Polymer({
+      is: 'gestion-notificaciones',
+
+      properties: {
+        token: String,
+        authorizationKey: {
+          type: String,
+          value: 'AQUÍ PONES TU API KEY',
+        },
+        textoNotif: {
+          type: String,
+          value: 'esto es un test'
+        },
+        user: Object,
+        datosUser: Object,
+        notifActive: Boolean,
+        notifActivePermitidas: {
+          type: Boolean,
+          computed: 'isActiveNotif(datosUser, notifActive)'
+        }
+      },
+
+      listeners: {
+        'eltoggle.change': 'solicitarPermiso'
+      },
+
+      observers: ['guardarToken(user, token)'],
+
+      isActiveNotif: function(datosUser, active) {
+        if(datosUser && active && !datosUser.noNotifications) {
+          return true;
+        }
+        return false;
+      },
+
+      solicitarPermiso: function() {
+        if(this.$.eltoggle.active) {
+          console.log('pedir permiso')
+          this.$.messaging.requestPermission()
+            .then(function() {
+              console.log('permiso aceptado')
+            })
+            .catch(function() {
+              console.log('permiso rechazado')
+            });
+          this.fire('activar-notificaciones')                     
+        } else {
+          console.log('Anular notif')
+          this.fire('bloquear-notificaciones')         
+        }
+      },
+
+      guardarToken: function(user, token) {
+        console.log(user, token)
+        if(user && token){
+          console.log('observer')
+          this.fire('escribir-token', token)
+        }
+      },
+
+      handleMessage: function(e, data){
+        console.log(data);
+        this.fire('feedback-positivo', 'Has recibido una notificacion');
+      }
+    });
+  </script>
+</dom-module>
